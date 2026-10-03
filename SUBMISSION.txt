@@ -1,0 +1,5 @@
+OVERALL EXPLANATION (<=200 chars)
+PairPilot turns two consented social profiles into transparent agent personas, lets agents negotiate first dates, and ranks compatible matches with explainable evidence.
+
+TECHNICAL SECTION (<=500 chars)
+Frontend: HTML/CSS/JavaScript prototype; production target: Next.js 16 + TypeScript, Postgres/Supabase, and server-side LLM agents. LinkedIn is not scraped because its current terms prohibit third-party crawlers; use an authorized API or participant-supplied data. Instagram data should likewise be collected through permitted access. Each profile stores source URLs, consented facts, extracted traits, pairwise match reasons, and ranking scores.

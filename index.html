@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PairPilot — Agentic Dating</title>
+<style>
+:root{--bg:#080b12;--panel:#101522;--panel2:#151b2b;--text:#f5f7fb;--muted:#9ba7bc;--line:#25304a;--accent:#8b5cf6;--accent2:#ec4899;--good:#34d399;--warn:#fbbf24}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0,#251347 0,transparent 35%),radial-gradient(circle at 90% 10%,#142b52 0,transparent 32%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:1180px;margin:auto;padding:28px}.top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:26px}
+.brand{font-weight:800;font-size:24px;letter-spacing:-.03em}.brand span{color:#c084fc}.pill{font-size:12px;color:#cbd5e1;border:1px solid var(--line);padding:7px 10px;border-radius:999px;background:#0d1320}
+h1{font-size:46px;line-height:1.02;margin:20px 0 12px;letter-spacing:-.05em}.sub{color:var(--muted);max-width:760px;font-size:17px;line-height:1.6}
+.panel{background:linear-gradient(180deg,rgba(21,27,43,.92),rgba(12,17,29,.96));border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 20px 70px #0005;margin:18px 0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.two{grid-template-columns:1.2fr .8fr}.field{display:flex;flex-direction:column;gap:7px}.field label{font-size:12px;color:#aab5c9;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+input,textarea,select{width:100%;background:#0b101b;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:12px 13px;outline:none}input:focus,textarea:focus{border-color:#8b5cf6}textarea{min-height:100px;resize:vertical}
+button{border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white}button.secondary{background:#182033;border:1px solid var(--line)}button.ghost{background:transparent;border:1px solid var(--line)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.note{font-size:12px;color:#8e9ab0;line-height:1.5;margin-top:10px}
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}.tab{padding:9px 12px;border:1px solid var(--line);border-radius:999px;color:#aab5c9;cursor:pointer}.tab.active{color:#fff;background:#20283d;border-color:#6d4ed0}
+.card{background:#0c111d;border:1px solid var(--line);border-radius:18px;padding:17px}.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#7c3aed,#ec4899);font-weight:900}.person{display:flex;align-items:center;gap:12px}.muted{color:var(--muted)}.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.tag{font-size:11px;border:1px solid #303b56;color:#b8c3d6;border-radius:999px;padding:5px 8px}
+.stat{font-size:28px;font-weight:900}.bar{height:7px;background:#1c263a;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#8b5cf6,#ec4899)}
+.profile{display:grid;grid-template-columns:1fr 1fr;gap:14px}.profile h3{margin:0 0 8px}.score{font-size:34px;font-weight:900;color:#d8b4fe}
+.match{display:grid;grid-template-columns:1fr 100px 1fr;gap:12px;align-items:center}.heart{font-size:30px;text-align:center}.reason{font-size:12px;color:#aeb9cc;line-height:1.5;margin-top:9px}
+.chat{height:280px;overflow:auto;background:#090e18;border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:9px}.bubble{max-width:78%;padding:10px 12px;border-radius:14px;line-height:1.4;font-size:13px}.a{background:#211a3c;align-self:flex-start}.b{background:#16302d;align-self:flex-end}.system{align-self:center;color:#77839a;font-size:11px}
+.hidden{display:none}.ok{color:var(--good)}.warn{color:var(--warn)}
+footer{color:#6f7b91;font-size:12px;text-align:center;padding:28px}
+@media(max-width:850px){.grid,.profile,.two{grid-template-columns:1fr}.match{grid-template-columns:1fr}.heart{display:none}h1{font-size:36px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="brand">Pair<span>Pilot</span></div><div class="pill">Agentic dating demo · consent-first</div></div>
+  <section>
+    <h1>Agents date for you.<br><span style="color:#c084fc">You see the reasoning.</span></h1>
+    <p class="sub">Two-source profiles → agent analysis → agent-to-agent dates → compatibility ranking. This demo uses consented/fictional seed data; the importer accepts public LinkedIn + Instagram URLs and user-supplied profile facts.</p>
+  </section>
+
+  <div class="panel">
+    <div class="tabs">
+      <div class="tab active" data-tab="import">1 · Add people</div>
+      <div class="tab" data-tab="profiles">2 · Profiles</div>
+      <div class="tab" data-tab="dates">3 · Agent dates</div>
+      <div class="tab" data-tab="rankings">4 · Rankings</div>
+    </div>
+
+    <div id="import">
+      <div class="grid">
+        <div class="field"><label>Name</label><input id="name" placeholder="e.g. Alex Morgan"></div>
+        <div class="field"><label>LinkedIn public URL</label><input id="li" placeholder="https://www.linkedin.com/in/..."></div>
+        <div class="field"><label>Instagram public URL</label><input id="ig" placeholder="https://www.instagram.com/..."></div>
+      </div>
+      <div class="field" style="margin-top:12px"><label>Consented profile facts</label><textarea id="facts" placeholder="Paste facts the person has chosen to provide: hobbies, interests, lifestyle, values, dating preferences..."></textarea></div>
+      <div class="actions"><button id="add">Add person</button><button class="secondary" id="seed">Load 25-person demo</button><button class="ghost" id="clear">Clear</button></div>
+      <div class="note">For a production deployment, only process profile information supplied with the person's permission. LinkedIn's current rules prohibit third-party crawlers/scrapers, so this demo does not automate LinkedIn scraping.</div>
+      <div id="importMsg" class="note"></div>
+    </div>
+
+    <div id="profiles" class="hidden">
+      <div id="profileGrid" class="grid"></div>
+    </div>
+
+    <div id="dates" class="hidden">
+      <div class="grid two">
+        <div><div id="dateChat" class="chat"></div><div class="actions"><button id="runDate">Run next agent date</button></div></div>
+        <div class="card"><div class="muted">Agent date log</div><h2 id="dateTitle">Ready</h2><p id="dateReason" class="reason">Load the demo, then watch two agents negotiate a date, compare preferences, and produce a compatibility signal.</p><div class="stat" id="dateScore">—</div><div class="muted">compatibility</div></div>
+      </div>
+    </div>
+
+    <div id="rankings" class="hidden">
+      <div class="card"><div class="muted">For every person</div><h2>Best-fit ranking</h2><p class="reason">Scores are deterministic demo signals from explicit interests/preferences, not judgments about the people.</p></div>
+      <div id="rankingList" style="margin-top:12px"></div>
+    </div>
+  </div>
+</div>
+<footer>PairPilot prototype · Built as an agentic product demo · Demo data is fictional/consented.</footer>
+
+<script>
+const demo=[
+["Ava","https://www.linkedin.com/in/demo-ava","https://www.instagram.com/demo_ava","Product designer who loves hiking, pottery, coffee shops, live music. Values curiosity, kindness, and weekend adventures."],
+["Noah","https://www.linkedin.com/in/demo-noah","https://www.instagram.com/demo_noah","Software engineer into running, photography, indie music and cooking. Values humor, learning and active weekends."],
+["Maya","https://www.linkedin.com/in/demo-maya","https://www.instagram.com/demo_maya","Marketing strategist, yoga, travel, books, art galleries and vegetarian cooking. Values empathy and creativity."],
+["Ethan","https://www.linkedin.com/in/demo-ethan","https://www.instagram.com/demo_ethan","Founder interested in startups, tennis, road trips, jazz and food. Values ambition, openness and spontaneity."],
+["Sofia","https://www.linkedin.com/in/demo-sofia","https://www.instagram.com/demo_sofia","UX researcher, loves museums, running, documentaries, plants and quiet cafes. Values thoughtfulness and curiosity."],
+["Liam","https://www.linkedin.com/in/demo-liam","https://www.instagram.com/demo_liam","Data analyst, cycling, chess, sci-fi and home cooking. Values reliability, wit and deep conversations."],
+["Isla","https://www.linkedin.com/in/demo-isla","https://www.instagram.com/demo_isla","Photographer who enjoys beaches, dance, fashion, travel and film. Values creativity, warmth and adventure."],
+["Arjun","https://www.linkedin.com/in/demo-arjun","https://www.instagram.com/demo_arjun","Product manager into cricket, trekking, podcasts, street food and technology. Values growth and humor."],
+["Emma","https://www.linkedin.com/in/demo-emma","https://www.instagram.com/demo_emma","Teacher who enjoys books, baking, gardens and acoustic concerts. Values patience, family and kindness."],
+["Kai","https://www.linkedin.com/in/demo-kai","https://www.instagram.com/demo_kai","Mobile developer, gamer, gym enthusiast and ramen fan. Values playfulness, honesty and ambition."],
+["Zoe","https://www.linkedin.com/in/demo-zoe","https://www.instagram.com/demo_zoe","Architect interested in design, city walks, ceramics, travel and sustainability. Values creativity and calm."],
+["Daniel","https://www.linkedin.com/in/demo-daniel","https://www.instagram.com/demo_daniel","Finance professional, golf, cooking, documentaries and weekend trips. Values stability, humor and honesty."],
+["Nina","https://www.linkedin.com/in/demo-nina","https://www.instagram.com/demo_nina","Content creator into dance, wellness, fashion, cafes and travel. Values confidence, kindness and fun."],
+["Leo","https://www.linkedin.com/in/demo-leo","https://www.instagram.com/demo_leo","Research scientist who enjoys climbing, classical music, puzzles and cooking. Values curiosity and depth."],
+["Riya","https://www.linkedin.com/in/demo-riya","https://www.instagram.com/demo_riya","HR professional, meditation, volunteering, books and long walks. Values empathy, communication and community."],
+["Mateo","https://www.linkedin.com/in/demo-mateo","https://www.instagram.com/demo_mateo","Chef interested in food culture, cycling, markets and travel. Values creativity, warmth and spontaneity."],
+["Chloe","https://www.linkedin.com/in/demo-chloe","https://www.instagram.com/demo_chloe","Journalist, podcasts, running, current affairs and independent cinema. Values curiosity and thoughtful conversation."],
+["Sam","https://www.linkedin.com/in/demo-sam","https://www.instagram.com/demo_sam","Teacher and amateur musician, guitar, hiking, board games and coffee. Values humor and kindness."],
+["Anaya","https://www.linkedin.com/in/demo-anaya","https://www.instagram.com/demo_anaya","Entrepreneur, yoga, startups, travel and plant-based cooking. Values independence and ambition."],
+["Oliver","https://www.linkedin.com/in/demo-oliver","https://www.instagram.com/demo_oliver","Filmmaker, cinema, photography, road trips and live gigs. Values creativity, humor and adventure."],
+["Sara","https://www.linkedin.com/in/demo-sara","https://www.instagram.com/demo_sara","Doctoral researcher, museums, reading, running and vegetarian food. Values intelligence, empathy and calm."],
+["Ben","https://www.linkedin.com/in/demo-ben","https://www.instagram.com/demo_ben","Sales leader who likes tennis, travel, restaurants and live sports. Values energy, honesty and ambition."],
+["Meera","https://www.linkedin.com/in/demo-meera","https://www.instagram.com/demo_meera","Illustrator, books, art, baking and nature walks. Values creativity, gentleness and curiosity."],
+["Lucas","https://www.linkedin.com/in/demo-lucas","https://www.instagram.com/demo_lucas","Cloud engineer, basketball, gaming, sci-fi and cooking. Values humor, loyalty and learning."],
+["Ivy","https://www.linkedin.com/in/demo-ivy","https://www.instagram.com/demo_ivy","Sustainability consultant, hiking, travel, plants, photography and community projects. Values kindness and purpose."]
+];
+
+let people=[];
+let dateIndex=0;
+
+function esc(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));}
+function parseFacts(f){
+ const terms=["hiking","running","travel","cooking","music","books","photography","design","art","yoga","tennis","cricket","gaming","film","food","startups","technology","cycling","nature","volunteering","fashion","dance","sports","chess","coffee","baking","plants","travel"];
+ return [...new Set(terms.filter(t=>f.toLowerCase().includes(t)))].slice(0,8);
+}
+function addPerson(n,li,ig,f){
+ if(!n||!li||!ig||!f) return false;
+ if(!/^https:\/\/(www\.)?linkedin\.com\//.test(li) || !/^https:\/\/(www\.)?instagram\.com\//.test(ig)) return false;
+ people.push({id:crypto.randomUUID(),name:n,li,ig,facts:f,tags:parseFacts(f)});
+ return true;
+}
+function seed(){
+ people=[]; demo.forEach(x=>addPerson(...x)); dateIndex=0; renderAll(); msg("25 demo profiles loaded.");
+}
+function msg(t){document.getElementById("importMsg").innerHTML='<span class="ok">'+esc(t)+'</span>';}
+function renderProfiles(){
+ const el=document.getElementById("profileGrid");
+ el.innerHTML=people.map((p,i)=>`<div class="card">
+ <div class="person"><div class="avatar">${esc(p.name[0])}</div><div><b>${esc(p.name)}</b><div class="muted">Agent ${String(i+1).padStart(2,"0")}</div></div></div>
+ <p class="reason">${esc(p.facts)}</p><div class="tags">${p.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
+ <div class="actions"><button class="ghost" onclick="showProfile('${p.id}')">Open profile</button></div>
+ </div>`).join("");
+}
+function showProfile(id){
+ const p=people.find(x=>x.id===id); if(!p)return;
+ alert(`${p.name}\\n\\nNEEDS\\n• ${p.tags.slice(0,3).join(", ")}\\n\\nHOBBIES\\n• ${p.tags.slice(3).join(", ") || "From supplied profile facts"}\\n\\nINTERESTS\\n• ${p.tags.join(", ")}\\n\\nSources\\n${p.li}\\n${p.ig}`);
+}
+function sim(a,b){
+ const A=new Set(a.tags),B=new Set(b.tags); const common=[...A].filter(x=>B.has(x));
+ let score=Math.min(98,48+common.length*8+((a.facts.includes("Values")&&b.facts.includes("Values"))?4:0));
+ return {score,common};
+}
+function rankings(){
+ const root=document.getElementById("rankingList");
+ root.innerHTML=people.map(p=>{
+  const rows=people.filter(x=>x.id!==p.id).map(x=>({x,...sim(p,x)})).sort((a,b)=>b.score-a.score);
+  return `<div class="panel"><div class="person"><div class="avatar">${esc(p.name[0])}</div><div><b>${esc(p.name)}</b><div class="muted">Agent ranking</div></div></div>
+  ${rows.slice(0,5).map((r,i)=>`<div style="display:grid;grid-template-columns:30px 1fr 55px;gap:10px;align-items:center;margin-top:12px"><b>#${i+1}</b><div><b>${esc(r.x.name)}</b><div class="bar"><i style="width:${r.score}%"></i></div><div class="reason">${r.common.length?("Shared: "+r.common.join(", ")): "Complementary interests"}</div></div><div class="score">${r.score}</div></div>`).join("")}
+  </div>`;
+ }).join("");
+}
+function runDate(){
+ if(people.length<2)return;
+ const a=people[dateIndex%people.length], b=people[(dateIndex+1)%people.length]; dateIndex++;
+ const s=sim(a,b), chat=document.getElementById("dateChat");
+ chat.innerHTML=`<div class="system">Agent date · ${new Date().toLocaleTimeString()}</div>
+ <div class="bubble a"><b>${esc(a.name)}'s agent:</b> I’m looking for ${esc(a.tags.slice(0,3).join(", "))}. What would make this a good first date?</div>
+ <div class="bubble b"><b>${esc(b.name)}'s agent:</b> Something around ${esc(b.tags.slice(0,3).join(", "))}. We overlap on ${esc(s.common.join(", ")||"curiosity")}. How about a relaxed plan?</div>
+ <div class="bubble a"><b>${esc(a.name)}'s agent:</b> Let’s combine ${esc(s.common.slice(0,2).join(" + ")||"conversation + a shared activity")} and keep it low-pressure.</div>
+ <div class="bubble b"><b>${esc(b.name)}'s agent:</b> Agreed. I’ll suggest it to my person as a potential match.</div>`;
+ document.getElementById("dateTitle").textContent=`${a.name} ↔ ${b.name}`;
+ document.getElementById("dateScore").textContent=s.score+"%";
+ document.getElementById("dateReason").textContent=s.common.length?`Shared interests: ${s.common.join(", ")}. The agents used only the supplied profile facts.`:"No direct overlap found; the agents still explored a complementary first-date plan.";
+}
+function renderAll(){renderProfiles();rankings();document.getElementById("dateChat").innerHTML="";document.getElementById("dateTitle").textContent="Ready";document.getElementById("dateScore").textContent="—";}
+
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));t.classList.add("active");document.querySelectorAll("#import,#profiles,#dates,#rankings").forEach(x=>x.classList.add("hidden"));document.getElementById(t.dataset.tab).classList.remove("hidden");});
+document.getElementById("seed").onclick=seed;
+document.getElementById("clear").onclick=()=>{people=[];renderAll();msg("Cleared.");};
+document.getElementById("add").onclick=()=>{
+ const ok=addPerson(document.getElementById("name").value.trim(),document.getElementById("li").value.trim(),document.getElementById("ig").value.trim(),document.getElementById("facts").value.trim());
+ if(ok){renderAll();msg("Person added. Their agent profile is ready.");} else msg("Add a name, valid LinkedIn + Instagram URLs, and consented profile facts.");
+};
+document.getElementById("runDate").onclick=runDate;
+seed();
+</script>
+</body></html>

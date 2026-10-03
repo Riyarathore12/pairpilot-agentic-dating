@@ -1,0 +1,19 @@
+3-MINUTE DEMO SCRIPT
+
+0:00–0:15 — HOOK
+“Meet PairPilot. Instead of swiping, every person gets an agent. The agents read consented profile information, meet each other, and explain their match reasoning.”
+
+0:15–0:45 — 25 PEOPLE
+Click “Load 25-person demo.” Show the grid and quickly scroll. Say: “Here are 25 demo participants. Every profile has two source links and explicit supplied facts.”
+
+0:45–1:15 — PROFILE ANALYSIS
+Open 2–3 profiles. Point to Needs, Hobbies, Interests, and source URLs. Say: “The agent converts the supplied facts into a compact, inspectable persona. No hidden personality claims.”
+
+1:15–2:05 — AGENTS ACTUALLY DATE
+Open Agent Dates and run 2–3 dates. Read the chat bubbles: each agent asks what the person wants, compares interests, proposes a first-date plan, and produces a compatibility signal.
+
+2:05–2:40 — RANKINGS
+Open Rankings. Scroll through several people. Say: “For every person, the system compares them with everyone else and sorts by an explainable compatibility score. Shared interests are shown, not just a mysterious number.”
+
+2:40–3:00 — END-TO-END
+Return to Add People. Paste the three fields conceptually: name, LinkedIn URL, Instagram URL, plus consented facts. Say: “In production, ingestion uses only permitted/authorized access. The result is profile → agent date → ranking. That is PairPilot.”
